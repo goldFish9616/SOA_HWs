@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+paths:
+  /api/users/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '200':
+          description: User registered successfully
+  /api/users/authenticate:
+    post:
+      summary: Authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthenticate'
+      responses:
+        '200':
+          description: User authenticated successfully
+        '401':
+          description: Unauthorized
+  /api/users/profile:
+    put:
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Profile updated successfully
+    get:
+      summary: Get user profile
+      responses:
+        '200':
+          description: Profile retrieved successfully
+components:
+  schemas:
+    UserCreate:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    UserAuthenticate:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    UserUpdate:
+      type: object
+      properties:
+        login:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        email:
+          type: string
+        phone_number:
+          type: string

@@ -1,0 +1,62 @@
+--Регистрация
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/users/register' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "login": "тест",
+    "password": "пароль",
+    "email": "nojndb@example.com"
+  }'
+
+--Аутентификация
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/users/authenticate' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "login": "тест",
+    "password": "пароль"
+  }'
+
+--Обновление профиля
+curl -X 'PUT' \
+  'http://127.0.0.1:8000/api/users/profile' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "login": "тест",
+    "first_name": "Familia",
+    "last_name": "Imia",
+    "birth_date": "2000-01-01",
+    "email": "novayapochta@example.com",
+    "phone_number": "+78976783322"
+  }'
+
+--Пользователь уже есть в базе
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/users/register' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "login": "testuser",
+    "password": "testpassword",
+    "first_name": "Test",
+    "last_name": "User",
+    "birth_date": "2000-01-01",
+    "email": "test@example.com",
+    "phone_number": "+1234567890"
+  }'
+curl -X 'GET' \
+  'http://127.0.0.1:8000/api/users/profile?login=testuser' \
+  -H 'accept: application/json'
+
+--Неправильный пароль или имя пользователя
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/users/authenticate' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "login": "invaliduser",
+    "password": "invalidpassword"
+  }'
