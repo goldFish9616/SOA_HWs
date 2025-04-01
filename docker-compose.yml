@@ -1,37 +1,63 @@
+version: '3.8'
+
 services:
-  api_service:
-    build: 
-      context: ./api_service
-      dockerfile: DockerFile
-    ports:
-      - "8000:8000"
-    depends_on:
-      - user_service
-
-  user_service:
-    build: 
-      context: ./user_service
-      dockerfile: DockerFile
-    ports:
-      - "8001:8001"
-    depends_on:
-      - user_db
-    environment:
-      DATABASE_URL: "postgresql://jinyuz:password@user_db:5432/userdb"
-
-  user_db:
+  shared_db:
     image: postgres:13
+    restart: always
     environment:
       POSTGRES_USER: jinyuz
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: userdb
+      POSTGRES_DB: shared_db
     ports:
-      - "5433:5433"
+      - "5432:5432"
     volumes:
-      - user_db_data:/var/lib/postgresql/data
+      - shared_db_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
 
-networks:
-  default:
-    name: my_network
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.user_service
+    restart: always
+    depends_on:
+      - shared_db
+    environment:
+      DATABASE_URL: postgresql://jinyuz:password@shared_db/shared_db?schema=user_service_schema
+    ports:
+      - "5001:5001"
+
+  promocode_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.promocode_service
+    restart: always
+    depends_on:
+      - shared_db
+    environment:
+      DATABASE_URL: postgresql://jinyuz:password@shared_db/shared_db?schema=promocode_service_schema
+    ports:
+      - "5002:5002"
+
+  proxy_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy_service
+    restart: always
+    depends_on:
+      - user_service
+      - promocode_service
+    ports:
+      - "5003:5000"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
 volumes:
-  user_db_data:
+  shared_db_data:
+

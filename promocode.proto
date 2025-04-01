@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package promocode;
+
+service PromocodeService {
+  rpc CreatePromocode(CreatePromocodeRequest) returns (Promocode);
+  rpc DeletePromocode(DeletePromocodeRequest) returns (DeleteResponse);
+  rpc UpdatePromocode(UpdatePromocodeRequest) returns (Promocode);
+  rpc GetPromocode(GetPromocodeRequest) returns (Promocode);
+  rpc ListPromocodes(ListPromocodesRequest) returns (ListPromocodesResponse);
+}
+
+message Promocode {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CreatePromocodeRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message DeletePromocodeRequest {
+  int32 id = 1;
+}
+
+message UpdatePromocodeRequest {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message GetPromocodeRequest {
+  int32 id = 1;
+}
+
+message ListPromocodesRequest {}
+
+message ListPromocodesResponse {
+  repeated Promocode promocodes = 1;
+}
+
+message DeleteResponse {
+  string message = 1;
+}

@@ -1,82 +1,117 @@
 openapi: 3.0.0
 info:
-  title: User API
+  title: Promocode Service API
   version: 1.0.0
 paths:
-  /api/users/register:
+  /create_promocode:
     post:
-      summary: Register a new user
+      summary: Create a new promocode
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCreate'
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
       responses:
-        '200':
-          description: User registered successfully
-  /api/users/authenticate:
-    post:
-      summary: Authenticate a user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserAuthenticate'
-      responses:
-        '200':
-          description: User authenticated successfully
-        '401':
+        201:
+          description: Promocode created successfully
+        400:
+          description: Invalid data
+        401:
           description: Unauthorized
-  /api/users/profile:
+
+  /delete_promocode/{promocode_id}:
+    delete:
+      summary: Delete a promocode by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: promocode_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Promocode deleted successfully
+        401:
+          description: Unauthorized
+        404:
+          description: Promocode not found
+
+  /update_promocode/{promocode_id}:
     put:
-      summary: Update user profile
+      summary: Update a promocode by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: promocode_id
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdate'
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
       responses:
-        '200':
-          description: Profile updated successfully
+        200:
+          description: Promocode updated successfully
+        400:
+          description: Invalid data
+        401:
+          description: Unauthorized
+        404:
+          description: Promocode not found
+
+  /get_promocode/{promocode_id}:
     get:
-      summary: Get user profile
+      summary: Get a promocode by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: promocode_id
+          required: true
+          schema:
+            type: integer
       responses:
-        '200':
-          description: Profile retrieved successfully
+        200:
+          description: Promocode found
+        401:
+          description: Unauthorized
+        404:
+          description: Promocode not found
+
+  /list_promocodes:
+    get:
+      summary: Get a list of all promocodes
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: A list of promocodes
+        401:
+          description: Unauthorized
+
 components:
-  schemas:
-    UserCreate:
-      type: object
-      properties:
-        login:
-          type: string
-        password:
-          type: string
-        email:
-          type: string
-    UserAuthenticate:
-      type: object
-      properties:
-        login:
-          type: string
-        password:
-          type: string
-    UserUpdate:
-      type: object
-      properties:
-        login:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        birth_date:
-          type: string
-          format: date
-        email:
-          type: string
-        phone_number:
-          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
