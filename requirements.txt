@@ -1,0 +1,10 @@
+flask
+flask_sqlalchemy
+flask_jwt_extended
+grpcio
+grpcio-tools
+psycopg2-binary
+pydantic
+pyyaml
+marshmallow
+requests
