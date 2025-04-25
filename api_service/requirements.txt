@@ -1,0 +1,7 @@
+fastapi
+httpx
+uvicorn
+grpcio
+grpcio-tools
+python-jose
+passlib
