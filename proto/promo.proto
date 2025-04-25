@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+service PromoService {
+  rpc CreatePromo (PromoCreateRequest) returns (PromoResponse);
+  rpc GetPromoById (PromoIdRequest) returns (PromoResponse);
+  rpc DeletePromo (PromoIdRequest) returns (PromoResponse);
+  rpc UpdatePromo (PromoUpdateRequest) returns (PromoResponse);
+  rpc ListPromos (PromoListRequest) returns (PromoListResponse);
+
+  rpc ViewPromo (PromoInteractionRequest) returns (PromoActionResponse);
+  rpc ClickPromo (PromoInteractionRequest) returns (PromoActionResponse);
+  rpc CommentPromo (PromoCommentRequest) returns (PromoActionResponse);
+  rpc GetComments (PromoCommentListRequest) returns (PromoCommentListResponse);
+}
+
+message PromoCreateRequest {
+  string name = 1;
+  string description = 2;
+  string creator_id = 3;
+  float discount = 4;
+  string code = 5;
+}
+
+message PromoUpdateRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator_id = 4;
+  float discount = 5;
+  string code = 6;
+}
+
+message PromoIdRequest {
+  string id = 1;
+}
+
+message PromoListRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message PromoResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator_id = 4;
+  float discount = 5;
+  string code = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message PromoListResponse {
+  repeated PromoResponse promos = 1;
+}
+
+message PromoInteractionRequest {
+  string id = 1;
+  string client_id = 2;
+}
+
+message PromoCommentRequest {
+  string id = 1;
+  string client_id = 2;
+  string text = 3;
+}
+
+message PromoCommentListRequest {
+  string id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message PromoComment {
+  string client_id = 1;
+  string text = 2;
+  string created_at = 3;
+}
+
+message PromoCommentListResponse {
+  repeated PromoComment comments = 1;
+  int32 total = 2;
+}
+
+message PromoActionResponse {
+  bool success = 1;
+  string message = 2;
+}
