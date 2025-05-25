@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package stat;
+
+service StatService {
+  rpc GetPromocodeStats(PromocodeRequest) returns (PromocodeStatsResponse);
+  rpc GetPromocodeDailyDynamics(DynamicsRequest) returns (DynamicsResponse);
+  rpc GetTopPromocodes(TopRequest) returns (TopPromocodesResponse);
+  rpc GetTopUsers(TopRequest) returns (TopUsersResponse);
+}
+
+message PromocodeRequest {
+  uint64 promocode_id = 1;
+}
+
+message TopRequest {
+  string type = 1; // "view", "click", "like", "comment"
+}
+
+message DynamicsRequest {
+  uint64 promocode_id = 1;
+  string type = 2;
+}
+
+message EventCount {
+  string date = 1;
+  uint64 count = 2;
+}
+
+message DynamicsResponse {
+  repeated EventCount daily_counts = 1;
+}
+
+message PromocodeStatsResponse {
+  uint64 views = 1;
+  uint64 clicks = 2;
+  uint64 likes = 3;
+  uint64 comments = 4;
+}
+
+message PromocodeInfo {
+  uint64 promocode_id = 1;
+  uint64 total = 2;
+}
+
+message TopPromocodesResponse {
+  repeated PromocodeInfo promocodes = 1;
+}
+
+message UserInfo {
+  uint64 user_id = 1;
+  uint64 total = 2;
+}
+
+message TopUsersResponse {
+  repeated UserInfo users = 1;
+}
+
